@@ -2,15 +2,16 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.core_defs.all;
+use work.functions_and_types.all;
 
 entity regfile is
 	port
 	(
 		clk         : in std_logic;								-- Clock signal
 		reset       : in std_logic;								-- Reset signal
-		ida         : in integer range 1 to ireg_num_registers;				-- Operand A register ID
-		idb         : in integer range 1 to ireg_num_registers;				-- Operand B register ID
-		idd         : in integer range 1 to ireg_num_registers;				-- destination register ID
+		ida         : in integer range 0 to ireg_num_registers;				-- Operand A register ID
+		idb         : in integer range 0 to ireg_num_registers;				-- Operand B register ID
+		idd         : in integer range 0 to ireg_num_registers;				-- destination register ID
 		ind         : in std_logic_vector (data_bits-1 downto 0);	-- data input
 		we          : in std_logic;								-- write enable
 		outa        : out std_logic_vector (data_bits-1 downto 0);	-- Operand A port read
@@ -30,7 +31,7 @@ begin
         if reset = '0' then
             registers <= (others => (others => '0'));
         elsif rising_edge(clk) then
-            if idd /= 0 then
+            if idd /= 0 and we = '1' then
                 registers(idd) <= ind;
             end if;
         end if;
