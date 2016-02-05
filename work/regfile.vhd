@@ -40,11 +40,11 @@ begin
     process(all)
     begin
         case ida is
-            when 0 =>       outa <= x"00_00_00_00";
+            when 0 =>       outa <= sign_extend('0',outa'length);
             when others =>  outa <= registers(ida);			-- read operand a
         end case;
         case idb is
-            when 0 =>       outb <= x"00_00_00_00";
+            when 0 =>       outb <= sign_extend('0',outb'length);
             when others =>  outb <= registers(idb);			-- read operand a
         end case;
     end process;
