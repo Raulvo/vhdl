@@ -22,7 +22,7 @@ begin
     process(clk,reset) begin
         if reset = '0' then
             sp_reg <= others => '0';
-        elsif rising_edge(clk) then
+        elsif rising_edge(clk) and we_esp = '1' then
             sp_reg <= in_sp;
         end if;
     end process;
