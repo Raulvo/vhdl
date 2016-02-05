@@ -10,7 +10,7 @@ entity register_sp is
 		reset           : in std_logic;								-- Reset signal
         we_sp           : in std_logic;                             -- write enable
 		in_sp           : in std_logic_vector (data_bits-1 downto 0);	-- data input
-		out_sp          : out std_logic_vector (data_bits-1 downto 0);	-- Operand A port read
+		out_sp          : out std_logic_vector (data_bits-1 downto 0)	-- Operand A port read
 	);
 end register_sp;
 
