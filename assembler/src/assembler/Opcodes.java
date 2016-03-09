@@ -29,7 +29,7 @@ public final class Opcodes {
 	public static final String jmp 	= 	"10000100";
 	public static final String beq 	= 	"10000000";
 	public static final Integer bitsinst	= 32;
-	public static final Integer bytesinst	= bitsinst/4;
+	public static final Integer bytesinst	= bitsinst/8;
 	public static final Integer bitsopcode	= 8;
 	public static final Integer bitsreg		= 5;
 	public static final Integer numregs		= (int) Math.pow(2, Opcodes.bitsreg);
