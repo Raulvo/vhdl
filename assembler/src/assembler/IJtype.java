@@ -86,7 +86,7 @@ public class IJtype extends Instruction {
 		} else if (labelmatcher.find()) {
 			if (AssemblerParser.isDataLabel(offstring) && this.acceptsDataLabels()) {
 				//Instead of getting value of the constant, get address to use it for loads.
-				//Range is limited, but with 2^18-1 to -2^18 is enough for testing the processor.
+				//Range is limited, but with 2^19 is enough for testing the processor.
 				this.offset = AssemblerParser.getAddress(offstring);
 			} else if (AssemblerParser.isCodeLabel(offstring) && this.acceptsCodeLabels()) {
 				this.offset = (AssemblerParser.getAddress(offstring) - this.instaddress) >> 2;
