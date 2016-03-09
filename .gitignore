@@ -1,33 +1,86 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# LaTeX temporary files
+*.aux
+*.log
+*.toc
 
-# Precompiled Headers
-*.gch
-*.pch
+# PDF output - usually a bad idea to keep this in Git
+*.pdf
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Latexmk
+*.fdb_latexmk
+*.fls
 
-# Fortran module files
-*.mod
+# SyncTeX
+*.synctex.gz
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
+# LaTeX Beamer
+*.snm
+*.vrb
+*.nav
 *.out
-*.app
+
+# BibTeX
+*.bbl
+*.blg
+
+.metadata
+bin/
+tmp/
+*.tmp
 *.bak
-*.mti
-_*
-*db
-simulation/*
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# Eclipse Core
+.project
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# PyDev specific (Python IDE for Eclipse)
+*.pydevproject
+
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific (PHP Development Tools)
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# Tern plugin
+.tern-project
+
+# TeXlipse plugin
+.texlipse
+
+# STS (Spring Tool Suite)
+.springBeans
+
+# Code Recommenders
+.recommenders/
+
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+.nb-gradle/
+
+#Java
+*.class
