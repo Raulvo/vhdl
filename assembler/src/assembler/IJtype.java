@@ -85,11 +85,9 @@ public class IJtype extends Instruction {
 			} else throw new BadInstructionException("No valid instruction offset");
 		} else if (labelmatcher.find()) {
 			if (AssemblerParser.isDataLabel(offstring) && this.acceptsDataLabels()) {
-				String d = AssemblerParser.getData(offstring);
-				String type = AssemblerParser.getDataType(offstring);
-				if (type.equals("int")) {
-					this.offset = Integer.parseInt(d);
-				} else throw new BadInstructionException("Using strings as immediate values is not allowed.");
+				//Instead of getting value of the constant, get address to use it for loads.
+				//Range is limited, but with 2^18-1 to -2^18 is enough for testing the processor.
+				this.offset = AssemblerParser.getAddress(offstring);
 			} else if (AssemblerParser.isCodeLabel(offstring) && this.acceptsCodeLabels()) {
 				this.offset = (AssemblerParser.getAddress(offstring) - this.instaddress) >> 2;
 			} else throw new BadInstructionException("Invalid label");
