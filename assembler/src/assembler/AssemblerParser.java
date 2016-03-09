@@ -134,8 +134,6 @@ public class AssemblerParser {
 					if (!label.isEmpty() && !label.equals(line)) {
 						data = label;
 						if (!codelabels.containsKey(label)) {
-							System.out.println(data);
-							System.out.println(lastcodeaddress);
 							codelabels.put(label,new Data(data,lastcodeaddress,null,label));
 						} else {
 							filereader.close();
@@ -180,7 +178,6 @@ public class AssemblerParser {
 						throw new IllegalAsmException("No opcode found");
 					}
 					Instruction inst = Instruction.NewInstruction(instop, lastcodeaddress);
-					System.out.println(line);
 					inst.parseInstruction(line);
 					instructions.add(inst);
 					lastcodeaddress+=Opcodes.bytesinst;
