@@ -69,25 +69,27 @@ public class Jtype extends Instruction {
 		if (opmatcher.find()) {
 			offstring = opmatcher.group(2);
 		} else throw new BadInstructionException("No valid instruction operands");
-		if (offstring.isEmpty()) throw new BadInstructionException("No offset operand found in J instruction");
-		Matcher labelmatcher = Jtype.labelp.matcher(offstring);
-		Matcher offsetmatcher = Jtype.offsetp.matcher(offstring);
-		labelmatcher.reset(); offsetmatcher.reset();
-		if (offsetmatcher.find()) {
-			String type = offsetmatcher.group(2);
-			if (type.contains("#")) {
-				this.offset = Integer.parseInt(offsetmatcher.group(3));
-			} else if (type.contains("0x")) {
-				this.offset = Integer.parseInt(offsetmatcher.group(3),16);
-			} else throw new BadInstructionException("No valid instruction offset");
-		} else if (labelmatcher.find()) {
-			if (AssemblerParser.isCodeLabel(offstring) && this.acceptsCodeLabels()) {
-				this.offset = (AssemblerParser.getAddress(offstring) - this.instaddress) >> 2;
-			} else throw new BadInstructionException("Invalid label");
-			
-		} else throw new BadInstructionException("Invalid offset/label field");
-		if (this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
-			throw new BadInstructionException("An instruction operand is out of range");
+		if (offstring == null) throw new BadInstructionException("No offset operand found in J instruction");
+		else {
+			Matcher labelmatcher = Jtype.labelp.matcher(offstring);
+			Matcher offsetmatcher = Jtype.offsetp.matcher(offstring);
+			labelmatcher.reset(); offsetmatcher.reset();
+			if (offsetmatcher.find()) {
+				String type = offsetmatcher.group(2);
+				if (type.contains("#")) {
+					this.offset = Integer.parseInt(offsetmatcher.group(3));
+				} else if (type.contains("0x")) {
+					this.offset = Integer.parseInt(offsetmatcher.group(3),16);
+				} else throw new BadInstructionException("No valid instruction offset");
+			} else if (labelmatcher.find()) {
+				if (AssemblerParser.isCodeLabel(offstring) && this.acceptsCodeLabels()) {
+					this.offset = (AssemblerParser.getAddress(offstring) - this.instaddress) >> 2;
+				} else throw new BadInstructionException("Invalid label");
+				
+			} else throw new BadInstructionException("Invalid offset/label field");
+			if (this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
+				throw new BadInstructionException("An instruction operand is out of range");
+			}
 		}
 		return true;
 	}

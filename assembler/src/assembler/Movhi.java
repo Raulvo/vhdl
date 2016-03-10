@@ -1,6 +1,6 @@
 package assembler;
 
-public class Movhi extends Mov {
+public class Movhi extends IJtype {
 	public Movhi(Integer address) {
 		super(Opcodes.movhi,address);
 	}

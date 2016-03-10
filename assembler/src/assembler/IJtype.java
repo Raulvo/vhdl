@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  *  Jump Register 	(JR)
  *  Move Immediate 	(MOVI)
  */
-public class IJtype extends Instruction {
+public abstract class IJtype extends Instruction {
 	private static Pattern opsexp = null;
 	private static Pattern labelp = null;
 	private static Pattern offsetp = null;
@@ -73,27 +73,29 @@ public class IJtype extends Instruction {
 			offstring = opmatcher.group(3);
 		} else throw new BadInstructionException("No valid instruction operands");
 
-		if (offstring.isEmpty()) throw new BadInstructionException("No offset operand found in MBIR instruction");
-		Matcher labelmatcher = IJtype.labelp.matcher(offstring);
-		Matcher offsetmatcher = IJtype.offsetp.matcher(offstring);
-		if (offsetmatcher.find()) {
-			String type = offsetmatcher.group(2);
-			if (type.contains("#")) {
-				this.offset = Integer.parseInt(offsetmatcher.group(3));
-			} else if (type.contains("0x")) {
-				this.offset = Integer.parseInt(offsetmatcher.group(3),16);
-			} else throw new BadInstructionException("No valid instruction offset");
-		} else if (labelmatcher.find()) {
-			if (AssemblerParser.isDataLabel(offstring) && this.acceptsDataLabels()) {
-				this.offset = AssemblerParser.getAddress(offstring);
-			} else if (AssemblerParser.isCodeLabel(offstring) && this.acceptsCodeLabels()) {
-				this.offset = (AssemblerParser.getAddress(offstring) - this.instaddress) >> 2;
-			} else throw new BadInstructionException("Invalid label");
-			
-		} else throw new BadInstructionException("Invalid offset/label field");
-		if (this.rd < 0 || this.rd > Opcodes.numregs-1 
-				|| this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
-			throw new BadInstructionException("An instruction operand is out of range");
+		if (offstring == null) throw new BadInstructionException("No offset operand found in MBIR instruction");
+		else {
+			Matcher labelmatcher = IJtype.labelp.matcher(offstring);
+			Matcher offsetmatcher = IJtype.offsetp.matcher(offstring);
+			if (offsetmatcher.find()) {
+				String type = offsetmatcher.group(2);
+				if (type.contains("#")) {
+					this.offset = Integer.parseInt(offsetmatcher.group(3));
+				} else if (type.contains("0x")) {
+					this.offset = Integer.parseInt(offsetmatcher.group(3),16);
+				} else throw new BadInstructionException("No valid instruction offset");
+			} else if (labelmatcher.find()) {
+				if (AssemblerParser.isDataLabel(offstring) && this.acceptsDataLabels()) {
+					this.offset = AssemblerParser.getAddress(offstring);
+				} else if (AssemblerParser.isCodeLabel(offstring) && this.acceptsCodeLabels()) {
+					this.offset = (AssemblerParser.getAddress(offstring) - this.instaddress) >> 2;
+				} else throw new BadInstructionException("Invalid label");
+				
+			} else throw new BadInstructionException("Invalid offset/label field");
+			if (this.rd < 0 || this.rd > Opcodes.numregs-1 
+					|| this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
+				throw new BadInstructionException("An instruction operand is out of range");
+			}
 		}
 		return true;
 	}

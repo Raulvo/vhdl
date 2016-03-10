@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
  * Multiplication	(MULD)
  * 
  */
-public class Rtype extends Instruction {
+public abstract class Rtype extends Instruction {
 	private static Pattern opsexp = null;
 	
 	public Rtype() {

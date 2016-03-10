@@ -18,7 +18,7 @@
  *******************************************************************************/
 package assembler;
 
-public class Movi extends Mov {
+public class Movi extends IJtype {
 
 	public Movi(Integer address) {
 		super(Opcodes.movi,address);
