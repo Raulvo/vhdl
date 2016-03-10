@@ -23,7 +23,9 @@ public final class Opcodes {
 	public static final String halt = 	"11111111";
 	public static final String addd = 	"00000001";
 	public static final String subd = 	"00000010";
+	public static final String movd = 	"00001001";
 	public static final String movi = 	"00011001";
+	public static final String movhi = 	"00101001";
 	public static final String ld 	= 	"01000000";
 	public static final String sd 	= 	"01000001";
 	public static final String jmp 	= 	"10000100";
@@ -59,8 +61,12 @@ public final class Opcodes {
 				return Opcodes.addd;
 			case "subd":
 				return Opcodes.subd;
+			case "movd":
+				return Opcodes.movd;
 			case "movi":
 				return Opcodes.movi;
+			case "movhi":
+				return Opcodes.movhi;
 			case "ld":
 				return Opcodes.ld;
 			case "sd":

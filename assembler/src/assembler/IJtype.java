@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  * register. It is also employed for immediate instructions.
  * Instruction format:
  *  |    opcode    |     Rd   |        Address/Offset            |
- *  31           24 23      20 18                                0
+ *  31           24 23      19 18                                0
  *  
  *  Example of instructions using this format are:
  *  
@@ -85,16 +85,13 @@ public class IJtype extends Instruction {
 			} else throw new BadInstructionException("No valid instruction offset");
 		} else if (labelmatcher.find()) {
 			if (AssemblerParser.isDataLabel(offstring) && this.acceptsDataLabels()) {
-				//Instead of getting value of the constant, get address to use it for loads.
-				//Range is limited, but with 2^19 address space (addresses are used as unsigned)
-                                //is enough for testing the processor.
 				this.offset = AssemblerParser.getAddress(offstring);
 			} else if (AssemblerParser.isCodeLabel(offstring) && this.acceptsCodeLabels()) {
 				this.offset = (AssemblerParser.getAddress(offstring) - this.instaddress) >> 2;
 			} else throw new BadInstructionException("Invalid label");
 			
 		} else throw new BadInstructionException("Invalid offset/label field");
-		if (this.ra < 0 || this.ra > Opcodes.numregs-1 || this.rd < 0 || this.rd > Opcodes.numregs-1 
+		if (this.rd < 0 || this.rd > Opcodes.numregs-1 
 				|| this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
 			throw new BadInstructionException("An instruction operand is out of range");
 		}

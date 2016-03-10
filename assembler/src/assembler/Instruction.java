@@ -160,8 +160,12 @@ public abstract class Instruction {
 				return new Addd(address);
 			case "subd":
 				return new Subd(address);
+			case "movd":
+				return new Movd(address);
 			case "movi":
 				return new Movi(address);
+			case "movhi":
+				return new Movhi(address);
 			case "ld":
 				return new Ld(address);
 			case "sd":

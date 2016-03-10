@@ -18,19 +18,13 @@
  *******************************************************************************/
 package assembler;
 
-public class Movi extends IJtype {
+public class Movi extends Mov {
 
 	public Movi(Integer address) {
 		super(Opcodes.movi,address);
 	}
 	
-	@Override
-	public Boolean acceptsCodeLabels() {
-		return false;
-	}
-	
-	@Override
-	public Boolean acceptsDataLabels() {
-		return true;
+	public Movi(Integer op,Integer address) {
+		super(Opcodes.movhi,address);
 	}
 }
