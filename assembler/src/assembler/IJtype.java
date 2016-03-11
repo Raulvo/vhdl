@@ -46,12 +46,12 @@ public abstract class IJtype extends Instruction {
 	public IJtype(String opcode, Integer address) {
 		super(opcode,address);
 		if (opsexp == null)
-			opsexp = Pattern.compile("([ ]*r([0-9]{1,})[ ]*,[ ]*((#-?|0x-?)([0-9]{1,})|[A-Z]{1,}[0-9]?{1,}))", 
+			opsexp = Pattern.compile("([ ]*r([0-9]{1,})[ ]*,[ ]*((#|0x)(-?[0-9]{1,})|[A-Z]{1,}[0-9]?{1,}))", 
 					Pattern.CASE_INSENSITIVE);
 		if (labelp == null)
 			labelp = Pattern.compile("([A-Z]{1,}[0-9]?{1,})", Pattern.CASE_INSENSITIVE);
 		if (offsetp == null)
-			offsetp = Pattern.compile("((#-?|0x-?)([0-9]{1,}))", Pattern.CASE_INSENSITIVE);
+			offsetp = Pattern.compile("((#|0x)(-?[0-9]{1,}))", Pattern.CASE_INSENSITIVE);
 	}
 	@Override
 	public Integer getBinaryRepresentation() {
@@ -59,7 +59,7 @@ public abstract class IJtype extends Instruction {
 		instruction = (0x000000FF & this.opcode) << Opcodes.bitsinst-Opcodes.bitsopcode;
 		instruction = instruction | ((0x0000001F & this.rd) << (Opcodes.bitsinst-Opcodes.bitsopcode-Opcodes.bitsreg));
 		instruction = instruction | (0x000FFFFF & this.offset);
-		return 0;
+		return instruction;
 	}
 
 	@Override
@@ -72,8 +72,7 @@ public abstract class IJtype extends Instruction {
 			this.rd = Integer.parseInt(opmatcher.group(2));
 			offstring = opmatcher.group(3);
 		} else throw new BadInstructionException("No valid instruction operands");
-
-		if (offstring == null) throw new BadInstructionException("No offset operand found in MBIR instruction");
+		if (offstring == null) throw new BadInstructionException("No offset operand found in IJ instruction");
 		else {
 			Matcher labelmatcher = IJtype.labelp.matcher(offstring);
 			Matcher offsetmatcher = IJtype.offsetp.matcher(offstring);
@@ -92,10 +91,10 @@ public abstract class IJtype extends Instruction {
 				} else throw new BadInstructionException("Invalid label");
 				
 			} else throw new BadInstructionException("Invalid offset/label field");
-			if (this.rd < 0 || this.rd > Opcodes.numregs-1 
-					|| this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
-				throw new BadInstructionException("An instruction operand is out of range");
-			}
+		}
+		if (this.rd < 0 || this.rd > Opcodes.numregs-1 
+				|| this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
+			throw new BadInstructionException("An instruction operand is out of range");
 		}
 		return true;
 	}

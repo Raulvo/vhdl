@@ -25,6 +25,10 @@ public class Movi extends IJtype {
 	}
 	
 	public Movi(Integer op,Integer address) {
-		super(Opcodes.movhi,address);
+		super(Opcodes.movi,address);
+	}
+	
+	public Boolean acceptsCodeLabels() {
+		return false;
 	}
 }

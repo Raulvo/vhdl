@@ -84,3 +84,4 @@ nbactions.xml
 
 #Java
 *.class
+*.jar

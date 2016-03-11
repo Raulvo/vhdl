@@ -75,7 +75,7 @@ public class AssemblerParser {
 		Boolean datafound = false;
 		Pattern stringData = Pattern.compile("\"(.*?)\"",Pattern.CASE_INSENSITIVE);
 		Pattern intData = Pattern.compile("-?[0-9]{1,}\\w",Pattern.CASE_INSENSITIVE);
-		Pattern stringOp = Pattern.compile("(nop|halt|addd|subd|movi|ld|sd|jmp|beq)",Pattern.CASE_INSENSITIVE);
+		Pattern stringOp = Pattern.compile("(nop|halt|addd|subd|movd|movi|movhi|ld|sd|jmp|beq)",Pattern.CASE_INSENSITIVE);
 		Matcher stringMatcher;
 		Matcher intMatcher;
 		Matcher opMatcher;
@@ -177,6 +177,7 @@ public class AssemblerParser {
 						filereader.close();
 						throw new IllegalAsmException("No opcode found");
 					}
+					instop = instop.toLowerCase();
 					Instruction inst = Instruction.NewInstruction(instop, lastcodeaddress);
 					inst.parseInstruction(line);
 					instructions.add(inst);

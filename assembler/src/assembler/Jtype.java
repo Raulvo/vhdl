@@ -46,17 +46,17 @@ public class Jtype extends Instruction {
 	public Jtype(String opcode, Integer address) {
 		super(opcode,address);
 		if (opsexp == null)
-			opsexp = Pattern.compile("[A-Z][ ]{1,}([ ]*((#-?|0x-?)([0-9]{1,})|[A-Z]{1,}[0-9]?{1,}))", Pattern.CASE_INSENSITIVE); //Jump
+			opsexp = Pattern.compile("[A-Z][ ]{1,}([ ]*((#|0x)(-?[0-9]{1,})|[A-Z]{1,}[0-9]?{1,}))", Pattern.CASE_INSENSITIVE); //Jump
 		if (labelp == null)
 			labelp = Pattern.compile("([A-Z]{1,}[0-9]?{1,})", Pattern.CASE_INSENSITIVE);
 		if (offsetp == null)
-			offsetp = Pattern.compile("((#-?|0x-?)([0-9]{1,}))", Pattern.CASE_INSENSITIVE);
+			offsetp = Pattern.compile("((#|0x)(-?[0-9]{1,}))", Pattern.CASE_INSENSITIVE);
 	}
 	@Override
 	public Integer getBinaryRepresentation() {
 		Integer instruction = 0; //We start with a NOP.
 		instruction = (0x000000FF & this.opcode) << Opcodes.bitsinst-Opcodes.bitsopcode;
-		instruction = instruction | (0x0007FFFF & this.offset);
+		instruction = instruction | (0x00FFFFFF & this.offset);
 		return instruction;
 	}
 
@@ -87,9 +87,9 @@ public class Jtype extends Instruction {
 				} else throw new BadInstructionException("Invalid label");
 				
 			} else throw new BadInstructionException("Invalid offset/label field");
-			if (this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
-				throw new BadInstructionException("An instruction operand is out of range");
-			}
+		}
+		if (this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
+			throw new BadInstructionException("An instruction operand is out of range");
 		}
 		return true;
 	}

@@ -39,15 +39,15 @@ import java.util.regex.Pattern;
  * Move						(MOVD)
  */
 public abstract class MBIRtype extends Instruction {
-	private static Pattern opsexp = null;
-	private static Pattern labelp = null;
-	private static Pattern offsetp = null;
+	protected static Pattern opsexp = null;
+	protected static Pattern labelp = null;
+	protected static Pattern offsetp = null;
 	protected Boolean needsoffset = true;
 
 	public MBIRtype(String op, Integer address) {
 		super(op,address);
 		if (opsexp == null) 
-			opsexp = Pattern.compile("([ ]*r([0-9]{1,})[ ]*,[ ]*r([0-9]{1,})[ ]*,[ ]*(#-?[0-9]{1,}|0x-?[0-9]{1,}|.*))",Pattern.CASE_INSENSITIVE);
+			opsexp = Pattern.compile("([ ]*r([0-9]{1,})[ ]*,[ ]*r([0-9]{1,})[ ]*(,[ ]*(#-?[0-9]{1,}|0x-?[0-9]{1,}|.*))?)",Pattern.CASE_INSENSITIVE);
 		if (labelp == null)
 			labelp = Pattern.compile("([A-Z]{1,}[0-9]?{1,})", Pattern.CASE_INSENSITIVE);
 		if (offsetp == null)
@@ -74,11 +74,13 @@ public abstract class MBIRtype extends Instruction {
 		if (opmatcher.find()) {
 			this.rd = Integer.parseInt(opmatcher.group(2));
 			this.ra = Integer.parseInt(opmatcher.group(3));
-			if (this.needsoffset) offstring = opmatcher.group(4);
+			if (this.needsoffset) offstring = opmatcher.group(5);
 		} else throw new BadInstructionException("No valid instruction operands");
-
-		if (offstring == null && !this.needsoffset) throw new BadInstructionException("No offset operand found in MBIR instruction");
-		else {
+		
+		if (offstring == null) {
+			if (this.needsoffset)
+				throw new BadInstructionException("No offset operand found in MBIR instruction");
+		} else {
 			Matcher labelmatcher = MBIRtype.labelp.matcher(offstring);
 			Matcher offsetmatcher = MBIRtype.offsetp.matcher(offstring);
 			if (offsetmatcher.find()) {
@@ -94,12 +96,11 @@ public abstract class MBIRtype extends Instruction {
 				} else if (AssemblerParser.isCodeLabel(offstring) && this.acceptsCodeLabels()) {
 					this.offset = (AssemblerParser.getAddress(offstring) - this.instaddress) >> 2;
 				} else throw new BadInstructionException("Invalid label");
-				
 			} else throw new BadInstructionException("Invalid offset/label field");
-			if (this.ra < 0 || this.ra > Opcodes.numregs-1 || this.rd < 0 || this.rd > Opcodes.numregs-1 
-					|| this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
-				throw new BadInstructionException("An instruction operand is out of range");
-			}
+		}
+		if (this.ra < 0 || this.ra > Opcodes.numregs-1 || this.rd < 0 || this.rd > Opcodes.numregs-1 
+				|| this.offset < Opcodes.limitnegoffset || this.offset > Opcodes.limitposoffset) {
+			throw new BadInstructionException("An instruction operand is out of range");
 		}
 		return true;
 	}
