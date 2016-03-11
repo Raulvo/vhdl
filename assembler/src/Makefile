@@ -2,7 +2,7 @@ all:
 	javac -cp . asm.java
 	jar cvef asm asm.jar *.class assembler
 
-install: 
+install: all
 	mkdir -p ../bin
 	cp asm.jar ../bin/
 
